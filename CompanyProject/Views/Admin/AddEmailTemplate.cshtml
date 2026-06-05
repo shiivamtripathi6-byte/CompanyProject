@@ -1,0 +1,167 @@
+﻿@model IEnumerable<CompanyProject.Models.EmailMaster>
+@{
+    ViewBag.Title = "AddEmailTemplate";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+@using System.Linq
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container mt-4">
+
+    <h3 class="text-center mb-4">Email Template Manager</h3>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="msgDiv alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+   
+    @if (TempData["Error"] != null)
+    {
+        <div class="msgDiv alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    @if (TempData["msg"] != null)
+    {
+        <div class="msgDiv alert alert-success">
+            @TempData["msg"]
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="msgDiv alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div class="card mb-3">
+        <div class="card-header bg-success text-white text-center">
+            Add New Email Template
+        </div>
+
+        <div class="card-body">
+
+            @using (Html.BeginForm("AddEmailTemplate", "Admin", FormMethod.Post))
+            {
+                <div class="row">
+                    <input type="hidden" name="Id" value="@ViewBag.Id" />
+                    <div class="mb-3">
+                        <label>Type</label>
+                        <input type="text" name="Type" value="@ViewBag.Type" class="form-control" placeholder="Enter Type" required />
+                    </div>
+                    <br /><br />
+                    <div class="mb-3">
+                        <label>Message</label>
+                        <textarea name="Message" class="form-control" id="summernote" rows="2" required>@ViewBag.Message</textarea>
+                    </div>
+                    <br />
+                    <div class="mb-3 d-flex align-items-end">
+                        @if (ViewBag.Id == null)
+                        {
+                            <button type="submit" class="btn btn-success w-100">
+                                Add Template
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-warning w-100">
+                                Update Template
+                            </button>
+                        }
+                    </div>
+                </div>
+
+            }
+
+        </div>
+    </div>
+
+    <div class="card">
+
+        <div class="card-header bg-primary text-white">
+            Email Template List
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-bordered table-hover text-center">
+
+                <thead class="table-light">
+                    <tr>
+                        <th style="width:20%">Type</th>
+                        <th style="width:60%">Message</th>
+                        <th style="width:20%">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @item.Type
+                            </td>
+
+                            <td>
+                                @item.Message
+                            </td>
+
+                            <td>
+                                <a href="@Url.Action("AddEmailTemplate","Admin", new { id = item.Id })" class="btn btn-primary btn-sm">
+                                    Edit
+                                </a>
+
+                                <form method="post" action="@Url.Action("DeleteEmailTemplate","Admin")" style="display:inline;">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this template?');">
+                                        Delete
+                                    </button>
+                               </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    @*<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.js"></script>
+    <script>
+        $('textarea#summernote').summernote({
+            placeholder: 'Hello bootstrap 4',
+            tabsize: 2,
+            height: 100,
+            toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'italic', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'hr']],
+            ['help', ['help']]
+            ],
+        });
+
+    </script>
+   <script>
+    window.onload = function () {
+
+        setTimeout(function () {
+
+            $(".msgDiv").fadeOut("slow");
+
+        }, 1000);
+
+    };
+</script>

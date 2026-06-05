@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/HomeLayout.cshtml";
+}
+@using System.Data
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<h2 class="text-center text-primary mt-3">Welcome to Your Library Dashboard</h2>
+
+@if (TempData["msg"] != null)
+{
+    <div class="alert alert-success text-center mt-2">
+        @TempData["msg"]
+    </div>
+}
+
+<hr />
+
+<div class="row">
+   
+    <div class="col-md-8">
+        <h4>Available Books</h4>
+        @{
+            DataTable dt = ViewBag.BookList as DataTable;
+            DataTable booked = ViewBag.BookedBooks as DataTable;
+        }
+        <div class="row g-4">
+            @if (dt != null)
+            {
+                foreach (DataRow row in dt.Rows)
+                {
+                    bool isBookedByUser = false;
+                    if (booked != null)
+                    {
+                        foreach (DataRow b in booked.Rows)
+                        {
+                            if (Convert.ToInt32(b["BookId"]) == Convert.ToInt32(row["BookId"]))
+                            {
+                                isBookedByUser = true;
+                                break;
+                            }
+                        }
+                    }
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <h5>@row["BookName"]</h5>
+                                <p>Quantity: @row["Quantity"]</p>
+                                <p>Status: @(Convert.ToInt32(row["Status"]) == 1 ? "Active" : "Inactive")</p>
+                            </div>
+                            <div class="card-footer text-center">
+                                @if (Convert.ToInt32(row["Status"]) == 1 && Convert.ToInt32(row["Quantity"]) > 0)
+                                {
+                                    <a href="@Url.Action("BookNow","User", new { bookId = row["BookId"] })" class="btn btn-success w-100 mb-2">Book Now</a>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-secondary w-100 mb-2" disabled>Not Available</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                } 
+            }
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <h4>Profile Info</h4>
+        @{
+            DataTable profile = ViewBag.Profile as DataTable;
+            DataRow userRow = null;
+            if (profile != null && profile.Rows.Count > 0)
+            {
+                userRow = profile.Rows[0];
+            }
+        }
+        <form method="post" action="@Url.Action("UpdateProfile","User")">
+            <div class="mb-2">
+                <label>Name</label>
+                <input type="text" name="Name" class="form-control" value="@(userRow != null ? userRow["Name"] : "")" required />
+            </div>
+            <div class="mb-2">
+                <label>Mobile</label>
+                <input type="text" name="Mobile" class="form-control" value="@(userRow != null ? userRow["Mobile"] : "")" required />
+            </div>
+            <div class="mb-2">
+                <label>City</label>
+                <input type="text" name="City" class="form-control" value="@(userRow != null ? userRow["City"] : "")" required />
+            </div>
+            <div class="mb-2">
+                <label>Password</label>
+                <input type="password" name="Password" class="form-control" value="@(userRow != null ? userRow["Password"] : "")" required />
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+          <br />
+
+            <a href="@Url.Action("UploadPhoto","User")" class="btn btn-info w-100 mb-2">
+                Upload Photo
+            </a>
+            
+            <a href="@Url.Action("ViewCard","User")" class="btn btn-success w-100">
+                View Card
+            </a>
+        </form>
+    </div>
+
+</div>

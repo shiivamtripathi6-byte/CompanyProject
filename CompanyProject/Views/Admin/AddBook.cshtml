@@ -1,0 +1,243 @@
+﻿@model CompanyProject.Models.BookMaster
+@{
+    ViewBag.Title = "AddBook";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+<style>
+    body {
+        background-color: #f4f6f9;
+    }
+
+    .book-card {
+        max-width: 550px;
+        margin: 50px auto;
+        padding: 30px 25px;
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+        .book-card h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 700;
+            color: #007bff;
+        }
+
+    .form-label {
+        font-weight: 600;
+    }
+
+    .btn-success {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    .alert {
+        text-align: center;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 20px;
+    }
+</style>
+<div class="book-card">
+
+    <h2><i class="fa fa-book"></i> Add New Book</h2>
+
+    @if (ViewBag.msg != null)
+    {
+        <div class="msgDiv alert alert-success">
+            <i class="fa fa-check-circle"></i> @ViewBag.msg
+        </div>
+    }
+    @if (TempData["msg"] != null)
+    {
+        <div class="msgDiv alert alert-success">
+            @TempData["msg"]
+        </div>
+    }
+     @using (Html.BeginForm("AddBook", "Admin", FormMethod.Post, new { autocomplete = "off" }))
+    {
+        @Html.AntiForgeryToken()
+         @Html.HiddenFor(model => model.BookId)
+        <div class="mb-3">
+            @Html.LabelFor(model => model.BookName, new { @class = "form-label required" })
+            @Html.TextBoxFor(model => model.BookName, new { @class = "form-control", placeholder = "Enter Book Name" })
+            @Html.ValidationMessageFor(model => model.BookName, "", new { style = "color:red" })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(model => model.Quantity, new { @class = "form-label required" })
+            @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control", placeholder = "Enter Quantity", type = "number" })
+            @Html.ValidationMessageFor(model => model.Quantity, "", new { style = "color:red" })
+        </div>
+
+        <div class="mb-3">
+
+            <button type="submit" class="btn btn-@(Model.BookId == 0 ? "success" : "primary")">
+                @(Model.BookId == 0 ? "Add Book" : "Update Book")
+            </button>
+    </div>
+    }
+</div>
+
+
+<style>
+    .page-card {
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: none;
+    }
+
+    .page-header {
+        background: linear-gradient(135deg,#198754,#0f5132);
+        color: white;
+        padding: 15px;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .badge {
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 13px;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f7ff;
+    }
+</style>
+@if (TempData["Error"] != null)
+{
+    <div class="msgDiv alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="msgDiv alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+<div class="container mt-4">
+
+    <div class="card page-card">
+
+        <div class="page-header text-center">
+            <h4>
+                <i class="fa fa-book"></i> Book List
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover text-center">
+
+                    <thead class="table-success">
+                        <tr>
+                            <th>Book ID</th>
+                            <th>Book Name</th>
+                            <th>Quantity</th>
+                            <th>Change Status</th>
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                       @if (Model != null && Model.Rows != null && Model.Rows.Rows.Count > 0)
+                       {
+                          foreach (System.Data.DataRow row in Model.Rows.Rows)
+                          {
+                                int qty = Convert.ToInt32(row["Quantity"]);
+                                bool status = Convert.ToBoolean(row["Status"]);
+
+                                <tr>
+
+                                    <td>
+                                        <strong>#@row["BookId"]</strong>
+                                    </td>
+
+                                    <td>
+                                        @row["BookName"]
+                                    </td>
+
+                                    <td>
+                                        @if (qty == 0)
+                                        {
+                                            <span class="badge bg-danger">
+                                                Out of Stock
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">
+                                                @qty Available
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        <a href="@Url.Action("ToggleBookStatus","Admin", new { id = row["BookId"] })" class="btn btn-sm @(status ? "btn-info" : "btn-danger")">
+                                            @(status ? "activate" : "Deactivate")
+                                        </a>
+                                    </td>
+                                    <td>
+
+                                        <a href="@Url.Action("AddBook","Admin", new { id = row["BookId"] })" class="btn btn-warning btn-sm">
+                                            <i class="fa fa-edit"></i> Edit
+                                        </a>
+
+                                        <form method="post" action="@Url.Action("DeleteBooks", "Admin")" style="display:inline;">
+
+                                            <input type="hidden" name="id" value="@row["BookId"]" />
+
+                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this book?');">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </button>
+                                        </form>
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-danger">
+                                    No Books Available
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    window.onload = function () {
+
+        setTimeout(function () {
+
+            $(".msgDiv").fadeOut("slow");
+
+        }, 1000);
+
+    };
+</script>

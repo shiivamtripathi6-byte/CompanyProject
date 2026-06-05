@@ -1,0 +1,252 @@
+﻿@{
+    ViewBag.Title = "Display_User";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+@model System.Data.DataTable
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+
+<div class="container-fluid page-container">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+            <h4 class="fw-bold text-dark mb-0">
+                User Management
+            </h4>
+            <small class="text-muted">
+                Manage system users, roles and permissions
+            </small>
+        </div>
+
+        <div>
+            <span class="badge bg-primary shadow-sm">
+                Total Users: @(Model != null ? Model.Rows.Count : 0)
+            </span>
+        </div>
+
+    </div>
+
+
+    <div class="card card-custom">
+
+        <div class="card-header-custom">
+
+            <h5>
+                User List
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+            @if(TempData["msg"] != null)
+            {
+                <div class="msgDiv alert alert-success shadow-sm">
+                    <i class="fa fa-check-circle"></i>
+                    @TempData["msg"] 
+                </div>  
+            }
+            @if (TempData["Success"] != null)
+            {
+                <div class="msgDiv alert alert-success shadow-sm">
+                    <i class="fa fa-check-circle"></i>
+                    @TempData["Success"]
+                </div>
+            }
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="msgDiv alert alert-danger shadow-sm">
+                    <i class="fa fa-times-circle"></i>
+                    @TempData["Error"]
+                </div>
+            }
+
+            <form method="get" class="mb-3">
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="text" name="search" class="form-control" placeholder="Search by Name / Mobile / City" value="@Request["search"]" />
+                    </div>
+                    <br />
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-search"></i> Search
+                        </button>
+                    </div>
+
+                    <div class="col-md-2">
+                        <a href="@Url.Action("Display_User","Admin")" class="btn btn-secondary">
+                            Reset
+                        </a>
+                    </div>
+                </div>
+            </form>
+            <div class="table-responsive">
+                <table id="basic-1" class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+
+                            <th>User ID</th>
+
+                            <th>Name</th>
+
+                            <th>Mobile</th>
+
+                            <th>City</th>
+
+                            <th>Status</th>
+
+                            <th>Registration Date</th>
+
+                            <th>Role</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @if (Model != null && Model.Rows.Count > 0)
+                        {
+                            foreach (System.Data.DataRow row in Model.Rows)
+                            {
+                                int status = Convert.ToInt32(row["Status"]);
+
+                                string statusText = status == 1 ? "Active" : (status == 0 ? "Inactive" : "Deleted");
+
+                                string badgeClass = status == 1 ? "bg-success" : (status == 0 ? "bg-warning text-dark" : "bg-danger");
+                                <tr>
+                                    <td>
+                                        <span class="fw-bold text-primary">
+                                            #@row["UserId"]
+                                        </span>
+                                    </td>
+
+                                    <td class="fw-semibold">
+                                        @row["Name"]
+                                    </td>
+
+                                    <td>
+                                        @row["Mobile"]
+                                    </td>
+
+                                    <td>
+                                        @row["City"]
+                                    </td>
+
+                                    <td>
+                                        <a href="@Url.Action("ToggleStatus","Admin", new { id = row["UserId"] })" class="badge badge-status @badgeClass"
+                                           onclick="return confirm('Are you sure you want to change status of this user?');">
+                                            @statusText
+                                        </a>
+
+                                    </td>
+                                    <td class="text-muted">
+
+                                        @Convert.ToDateTime(row["DateOfRegistration"]).ToString("dd MMM yyyy")
+
+                                        <br />
+
+                                        <small>
+                                            @Convert.ToDateTime(row["DateOfRegistration"]).ToString("hh:mm tt")
+                                        </small>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="badge bg-info text-dark">
+                                            @row["Role"]
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <a href="@Url.Action("Add_User","Admin", new { id = row["UserId"] })" class="btn btn-warning btn-sm btn-action">
+                                            <i class="fa fa-edit"></i>
+                                            Edit
+                                        </a>
+                                        <form action="@Url.Action("DeleteUser","Admin", new { id = row["UserId"] })" method="post" style="display:inline;">
+
+                                         <button type="submit" class="btn btn-danger btn-sm btn-action" onclick="return confirm('Are you sure you want to delete this user?');">
+                                            <i class="fa fa-trash"></i>
+                                                Delete
+                                            </button>
+                                        </form>
+
+                                        <a href="@Url.Action("Impersonate", "Admin", new { id = row["UserId"]})" class="btn btn-success btn-sm btn-action">
+                                            <i class="fa fa-sign-in"></i>
+                                            Login
+                                        </a>
+
+                                        <a href="@Url.Action("UserProfile","Admin", new { id = row["UserId"] })" class="btn btn-info btn-sm btn-action">
+                                          <i class="fa fa-user"></i>
+                                            Profile
+                                        </a>
+                                    </td>
+                                </tr>
+                               }
+                             }
+                             else
+                             {
+                             <tr>
+                                <td colspan="8" class="text-center text-danger no-data">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                    No Users Found
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#basic-1').DataTable({
+            destroy: true,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excel',
+                    text: 'Export to Excel',
+                    className: 'btn btn-success'
+                }
+            ]
+        });
+    });
+</script>
+<!-- jQuery --->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<!-- Buttons -->
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+
+<!-- JSZip (Excel ke liye required) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<!-- Export buttons -->
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+<script>
+    window.onload = function () {
+
+        setTimeout(function () {
+
+            $(".msgDiv").fadeOut("slow");
+
+        }, 1000);
+
+    };
+</script>

@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "DeleteUser";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model System.Data.DataTable
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>UserId</th>
+            <th>Name</th>
+            <th>Mobile</th>
+            <th>City</th>
+            <th>Status</th>
+            <th>Role</th>
+            <th>Date of Registration</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (System.Data.DataRow row in Model.Rows)
+        {
+            <tr>
+                <td>@row["UserId"]</td>
+                <td>@row["Name"]</td>
+                <td>@row["Mobile"]</td>
+                <td>@row["City"]</td>
+                <td>
+                 @{
+                 int status = Convert.ToInt32(row["Status"]);
+                 string statusText = status == 1 ? "Active" : (status == 10 ? "Deleted" : "Unknown");
+                    }
+                    @statusText
+                </td>
+
+                <td>@row["Role"]</td>
+                <td>@Convert.ToDateTime(row["DateOfRegistration"]).ToString("dd/MM/yyyy HH:mm:ss")</td>
+                <td>
+                    <a href="@Url.Action("EditUser", "Admin", new { id = row["UserId"] })" class="btn btn-primary btn-sm">
+                        <i class="fa fa-edit"></i> Edit
+                    </a>
+                    <a href="@Url.Action("DeleteUser", "Admin", new { id = row["UserId"] })"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Are you sure you want to delete this user?');">
+                        <i class="fa fa-trash"></i> Delete
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

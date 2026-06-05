@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Optional Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .navbar-custom {
+            background-color: #0d3b66;
+        }
+
+            .navbar-custom .nav-link,
+            .navbar-custom .navbar-brand {
+                color: white;
+            }
+
+                .navbar-custom .nav-link:hover {
+                    color: #ffc107;
+                }
+
+        footer {
+            background-color: #0d3b66;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+
+    </head>
+    <body>
+
+        <!-- ✅ Navbar Start -->
+        <nav class="navbar navbar-expand-lg navbar-custom">
+            <div class="container">
+
+                <a class="navbar-brand fw-bold" href="@Url.Action("Index","Home")">
+                    📚 Library System
+                </a>
+
+                <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#userNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="userNavbar">
+
+                    <ul class="navbar-nav me-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index","Home")">
+                                Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Add_User","Home")">
+                                User
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("BookList","Book")">
+                                Books
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("About","Home")">
+                                About
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Contact","Home")">
+                                Contact
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <!-- Right side menu -->
+                    <ul class="navbar-nav">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Login","Account")">
+                                Login
+                            </a>
+                        </li>
+
+                        
+                    </ul>
+
+                </div>
+
+            </div>
+        </nav>
+        <!-- ✅ Navbar End -->
+        <!-- ✅ Main Content -->
+        <div class="container mt-4">
+            @RenderBody()
+        </div>
+
+
+        <!-- ✅ Footer -->
+        <footer>
+            <p>
+                © @DateTime.Now.Year Library Management System |
+                All Rights Reserved
+            </p>
+        </footer>
+
+
+        <!-- Bootstrap JS -->
+        <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+
+    </body>
+</html>
+

@@ -1,0 +1,60 @@
+﻿@model CompanyProject.Models.Booking
+@{
+    ViewBag.Title = "BookNow";
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-success text-white text-center">
+
+                    <h4>
+                        <i class="fa fa-book"></i> Book Confirmation
+                    </h4>
+
+                </div>
+
+                <div class="card-body">
+
+                    @using (Html.BeginForm("BookNow", "User", FormMethod.Post))
+                    {
+                        @Html.HiddenFor(m => m.UserId)
+
+                        @Html.HiddenFor(m => m.BookId)
+                         <div class="mb-3">
+                            <label class="form-label">User Name</label>
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="mb-3">
+                        <label class="form-label">Book Name</label>
+                            @Html.TextBox("BookName", ViewBag.BookName as string, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Date Of Booking</label>
+                            <input type="text" class="form-control" value="@DateTime.Now.ToString("dd-MM-yyyy")" readonly />
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">Status</label>
+
+                            <input type="text" class="form-control" value="Active" readonly />
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fa fa-check"></i> 
+                                Confirm Booking
+                            </button>
+                        </div>
+                    } 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

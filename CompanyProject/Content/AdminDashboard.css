@@ -1,0 +1,94 @@
+﻿body {
+    margin: 0;
+    font-family: 'Segoe UI';
+    background-color:#f4f6f9;
+}
+.dashboard-container{
+    display: flex;
+}
+.Sidebar{
+    width:240px;
+    height:100vh;
+    background: linear-gradient(180deg, #1a237e, #3949ab);
+    color: white;
+    position: fixed;
+}
+.logo{
+    text-align: center;
+    padding:20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.menu{
+    list-style:none;
+    padding:0;
+}
+.menu li {
+    padding: 15px 20px;
+}
+
+.menu li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+.menu li:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.menu li.active {
+    background: rgba(255,255,255,0.2);
+}
+
+.main-content {
+    margin-left: 240px;
+    padding: 20px;
+    width: 100%;
+}
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Welcome Card */
+.welcome-card {
+    background: white;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Stats */
+.stats {
+    margin-top: 20px;
+}
+
+.stat-card {
+    padding: 20px;
+    color: white;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.stat-card i {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.blue {
+    background: linear-gradient(45deg, #2196f3, #21cbf3);
+}
+
+.green {
+    background: linear-gradient(45deg, #43a047, #66bb6a);
+}
+
+.orange {
+    background: linear-gradient(45deg, #fb8c00, #ffa726);
+}
+
+

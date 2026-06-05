@@ -1,0 +1,149 @@
+﻿@{
+    ViewBag.Title = "Login1";
+    Layout = "~/Views/Shared/HomeLayout.cshtml";
+}
+<style>
+    .panel-box {
+        display: none;
+        padding: 25px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #ccc;
+        max-width: 420px;
+        margin: auto;
+        margin-top: 60px;
+    }
+
+    .active-panel {
+        display: block;
+    }
+
+    .btn-full {
+        width: 100%;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container">
+   
+    <div id="panel1" class="panel-box @(Session["OTP"] == null && ViewBag.ShowRegisterPanel == null ? "active-panel" : "")">
+
+        <h4 class="text-center">Login with OTP</h4>
+
+        @using (Html.BeginForm("Login1", "User", FormMethod.Post))
+        {
+            <input type="hidden" name="mode" value="@ViewBag.Mode" />
+
+            <input type="text" name="Input" class="form-control" placeholder="@(ViewBag.Mode == "register" ? "Enter Email or Mobile" : "Enter Email / Mobile / UserId")" required />
+
+            <input type="submit" value="Send OTP" class="btn btn-primary btn-full" />
+        }
+        @if (ViewBag.ShowRegisterButton != null && ViewBag.ShowRegisterButton == true)
+        {
+            <br />
+            <a href="@Url.Action("Register","User")" class="btn btn-success">Register Now</a>
+        }
+        <button type="button" class="btn btn-secondary btn-full" onclick="showPanel3()">Login with Password</button>
+
+    </div>
+
+    <div id="panel2" class="panel-box @(Session["OTP"] != null && ViewBag.ShowRegisterPanel == null ? "active-panel" : "")">
+
+        <h4 class="text-center">Verify OTP</h4>
+
+        @if (ViewBag.GeneratedOTP != null)
+        {
+            <div class="alert alert-info text-center">
+                OTP : @ViewBag.GeneratedOTP
+            </div>
+        }
+
+        @using (Html.BeginForm("VerifyOTP", "User", FormMethod.Post))
+        {
+            <input type="text" name="OTP" class="form-control" placeholder="Enter OTP" required />
+
+            <input type="submit" value="Verify OTP" class="btn btn-success btn-full" />
+        }
+
+        @using (Html.BeginForm("ResendOTP", "User", FormMethod.Post))
+        {
+            <input type="submit" value="Resend OTP" class="btn btn-warning btn-full" />
+        }
+        <button type="button" class="btn btn-danger btn-full" onclick="showPanel1()">Change Email / Mobile</button>
+        <button type="button" class="btn btn-secondary btn-full" onclick="showPanel3()">Login with Password</button>
+
+    </div>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger text-center">
+            @ViewBag.Error
+        </div>
+    }
+
+    <div id="panel3" class="panel-box">
+
+        <h4 class="text-center">Login with Password</h4>
+
+        @using (Html.BeginForm("LoginWithPassword", "User", FormMethod.Post))
+        {
+            <input type="text" name="UserId" class="form-control" placeholder="Enter UserId/EmailId/Mobile" required />
+            <br />
+            <input type="password" name="Password" class="form-control" placeholder="Enter Password" required />
+            <br />
+            <input type="submit" value="Login" class="btn btn-primary btn-full" />
+        }
+        <button type="button" class="btn btn-secondary btn-full" onclick="showPanel1()">Login with OTP</button>
+
+    </div>
+
+    <div id="panel4" class="panel-box @(ViewBag.ShowRegisterPanel != null ? "active-panel" : "")">
+
+        <h4 class="text-center">Register</h4>
+
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success text-center">
+                @TempData["msg"]
+            </div>
+        }
+
+        @using (Html.BeginForm("Register", "User", FormMethod.Post))
+        {
+            <input type="text" name="Name" class="form-control" placeholder="Enter Name" required />
+            <br />
+
+            <input type="email" name="Email" class="form-control" value="@(ViewBag.Input != null && ViewBag.Input.ToString().Contains("@") ? ViewBag.Input : "")" required />
+            <br />
+
+           <input type="text" name="Mobile" class="form-control" placeholder="Enter Mobile" value="@(ViewBag.Input != null && !ViewBag.Input.ToString().Contains("@") ? ViewBag.Input : "")"
+           required />
+            <br />
+
+            <input type="password" name="Password" class="form-control" placeholder="Enter Password" required />
+            <br />
+
+            <input type="submit" value="Register Now" class="btn btn-success btn-full" />
+        }
+    </div>
+</div>
+
+
+
+<script>
+
+    function showPanel1() {
+        document.getElementById("panel1").classList.add("active-panel");
+        document.getElementById("panel2").classList.remove("active-panel");
+        document.getElementById("panel3").classList.remove("active-panel");
+        document.getElementById("panel4").classList.remove("active-panel");
+    }
+
+    function showPanel3() {
+        document.getElementById("panel3").classList.add("active-panel");
+        document.getElementById("panel1").classList.remove("active-panel");
+        document.getElementById("panel2").classList.remove("active-panel");
+        document.getElementById("panel4").classList.remove("active-panel");
+    }
+
+</script>

@@ -1,0 +1,140 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@using System.Data
+@if (TempData["msg"] != null)
+{
+    <div class="msgDiv alert alert-success text-center">
+        @TempData["msg"]
+    </div>
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+<h1 class="text text-center text-danger">Dashboard</h1>
+<hr />
+<div class="row g-4">
+
+    @{
+        DataTable dt = ViewBag.BookList as DataTable;
+
+        if (dt != null)
+        {
+            foreach (DataRow row in dt.Rows)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6">
+
+                    <div class="card shadow h-100">
+
+                        <div class="card-body text-center">
+
+                            <h5 class="mt-2">
+                                <span class="text-muted">Book Name :</span>
+                                <span class="fw-bold">@row["BookName"]</span>
+                            </h5>
+
+                            <p>
+                                <span class="text-muted">Quantity :</span>
+                                <strong>@row["Quantity"]</strong>
+                            </p>
+                            @if (Convert.ToInt32(row["Status"]) == 1)
+                            {
+                                <span class="badge bg-success mb-2">
+                                    Active
+                                </span>
+                            }
+                            else if (Convert.ToInt32(row["Status"]) == 0)
+                            {
+                                <span class="badge bg-warning text-dark mb-2">
+                                    Inactive
+                                </span>
+                            }
+
+                        </div>
+
+                        <div class="card-footer bg-white border-0">
+                            @if (Convert.ToInt32(row["Status"]) == 1 && Convert.ToInt32(row["Quantity"]) > 0)
+                            {
+                                <a href="@Url.Action("BookNow","User", new { bookId = row["BookId"] })"
+                                   class="btn btn-success w-100 mb-2">
+                                    Book Now
+                                </a>
+                            }
+                            else
+                            {
+                                <button class="btn btn-secondary w-100 mb-2" disabled>
+                                    Book Now
+                                </button>
+                            }
+
+                            
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+            }
+        }
+    }
+
+</div>
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <div class="card bg-primary text-white text-center">
+            <div class="card-body">
+                <h4>Total Users</h4>
+                <h2>@ViewBag.TotalUsers</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card bg-success text-white text-center">
+            <div class="card-body">
+                <h4>Total Books</h4>
+                <h2>@ViewBag.TotalBooks</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card bg-warning text-white text-center">
+            <div class="card-body">
+                <h4>Issued Books</h4>
+                <h2>@ViewBag.IssuedBooks</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="card bg-info text-white text-center">
+            <div class="card-body">
+                <h4>Returned Books</h4>
+                <h2>@ViewBag.ReturnedBooks</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="card bg-danger text-white text-center">
+            <div class="card-body">
+                <h4>Available Books</h4>
+                <h2>@ViewBag.AvailableBooks</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    window.onload = function () {
+
+        setTimeout(function () {
+
+            $(".msgDiv").fadeOut("slow");
+
+        }, 1000);
+
+    };
+</script>
+
+

@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "Deleted_Users";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model System.Data.DataTable
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+
+<div class="container mt-4">
+    <div class="card page-card">
+        <div class="page-header text-center">
+            <h4><i class="fa fa-trash"></i> Deleted Members</h4>
+        </div>
+        <div class="card-body">
+            @if (TempData["Success"] != null)
+            { <div class="msgDiv alert alert-success">@TempData["Success"]</div> }
+            @if (TempData["Error"] != null)
+            { <div class="msgDiv alert alert-danger">@TempData["Error"]</div> }
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover text-center">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>User ID</th>
+                            <th>Name</th>
+                            <th>Mobile</th>
+                            <th>City</th>
+                            <th>Status</th>
+                            <th>Registration Date</th>
+                            <th>Role</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Rows.Count > 0)
+                        {
+                            foreach (System.Data.DataRow row in Model.Rows)
+                            {
+                                <tr class="deleted-row">
+                                    <td>@row["UserId"]</td>
+                                    <td>@row["Name"]</td>
+                                    <td>@row["Mobile"]</td>
+                                    <td>@row["City"]</td>
+                                    <td><span class="badge bg-danger">Deleted</span></td>
+                                    <td>@Convert.ToDateTime(row["DateOfRegistration"]).ToString("dd MMM yyyy")</td>
+                                    <td>@row["Role"]</td>
+                                    <td>
+                                        <form action="@Url.Action("RestoreUser","Admin", new { id = row["UserId"] })" method="post" style="display:inline;">
+                                            <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Are you sure you want to restore this user?');">
+                                                <i class="fa fa-undo"></i> Restore
+                                            </button>
+                                        </form>
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8" class="text-center text-danger no-data">
+                                    <i class="fa fa-exclamation-circle"></i> No Deleted Users Found
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    window.onload = function () {
+
+        setTimeout(function () {
+
+            $(".msgDiv").fadeOut("slow");
+
+        }, 1000);
+
+    };
+</script>

@@ -1,0 +1,86 @@
+﻿
+@model System.Data.DataTable
+@{
+    ViewBag.Title = "DisplayUser";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <h2 class="text-center text-primary mb-4">Display User</h2>
+
+    <table class="table table-bordered table-striped table-hover">
+
+        <thead class="table-dark">
+            <tr>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Mobile</th>
+                <th>City</th>
+                <th>Status</th>
+                <th>Date Of Registration</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @if (Model != null && Model.Rows.Count > 0)
+            {
+                foreach (System.Data.DataRow row in Model.Rows)
+                {
+                    <tr>
+
+                        <td>@row["UserId"]</td>
+
+                        <td>@row["Name"]</td>
+
+                        <td>@row["Mobile"]</td>
+                        <td>@row["City"]</td>
+                        <td>
+                            @if (row["Status"].ToString() == "True")
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Inactive</span>
+                            }
+                        </td>
+
+                        <td>
+                            @Convert.ToDateTime(row["CreatedDate"]).ToString("dd-MM-yyyy")
+                        </td>
+
+                        <td>
+
+                            <a href="@Url.Action("EditUser","User", new { id = row["UserId"] })"
+                               class="btn btn-warning btn-sm">
+                                Edit
+                            </a>
+
+                            <a href="@Url.Action("DeleteUser","User", new { id = row["UserId"] })"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Are you sure to delete this user?');">
+                                Delete
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" class="text-center text-danger">
+                        No Users Found
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>
+

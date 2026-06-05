@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "BookingList";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+@using System.Data
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+
+<div class="container mt-4">
+    <h2 class="text-center text-primary mb-4">All Bookings</h2>
+
+    @if (TempData["msg"] != null)
+    {
+        <div class="msgDiv alert alert-success text-center">
+            <i class="fa fa-check-circle"></i> @TempData["msg"]
+        </div>
+    }
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>BookingId</th>
+                <th>User Name</th>
+                <th>Book Name</th>
+                <th>Total Copies</th>
+                <th>Issued Copies</th>
+                <th>Available Copies</th>
+                <th>Date Of Booking</th>
+                <th>Date Of Returning</th>
+                <th>Status</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                DataTable dt = ViewBag.BookingList as DataTable;
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    int total = Convert.ToInt32(row["TotalQuantity"]);
+                    int issued = Convert.ToInt32(row["IssuedBooks"]);
+                    int available = total - issued;
+
+                    DateTime dateBooking = Convert.ToDateTime(row["DateOfBooking"]);
+                    object dateReturnObj = row["DateOfReturning"];
+                    string dateReturning = dateReturnObj != DBNull.Value ? Convert.ToDateTime(dateReturnObj).ToString("dd-MM-yyyy HH:mm") : "-";
+
+                    <tr>
+                        <td>@row["BookingId"]</td>
+                        <td>@row["UserName"]</td>
+                        <td>@row["BookName"]</td>
+                        <td>@total</td>
+                        <td>@issued</td>
+                        <td>@available</td>
+                        <td>@dateBooking.ToString("dd-MM-yyyy HH:mm")</td>
+                        <td>@dateReturning</td>
+                        <td>
+                            @if (issued > 0)
+                            {
+                                <span class="badge bg-success">Issued</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Returned</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    window.onload = function () {
+
+        setTimeout(function () {
+
+            $(".msgDiv").fadeOut("slow");
+
+        }, 1000);
+
+    };
+</script>

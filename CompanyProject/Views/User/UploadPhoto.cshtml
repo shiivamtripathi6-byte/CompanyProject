@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "UploadPhoto";
+    Layout = "~/Views/Shared/HomeLayout.cshtml";
+}
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container mt-5">
+    <h3>Upload Profile Photo</h3>
+
+    <form method="post" enctype="multipart/form-data">
+
+        <div class="mb-3">
+            <label>Select Photo</label>
+            <input type="file" name="photo" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-primary">
+            Upload Photo
+        </button>
+
+    </form>
+</div>
+

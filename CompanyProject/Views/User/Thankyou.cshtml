@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Thankyou";
+    Layout = "~/Views/Shared/HomeLayout.cshtml";
+}
+
+@if (TempData["msg"] != null)
+{
+    <div class="alert alert-success text-center">
+        @TempData["msg"] <br />
+        Registration ID : <b>@TempData["RegId"]</b>
+        <br />
+        <a href="@Url.Action("Login1","User")">Go to Login</a>
+    </div>
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    window.onload = function () {
+
+        setTimeout(function () {
+
+            $(".msgDiv").fadeOut("slow");
+
+        }, 1000);
+
+    };
+</script>

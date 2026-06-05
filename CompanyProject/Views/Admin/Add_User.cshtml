@@ -1,0 +1,113 @@
+﻿@model CompanyProject.Models.AddUser
+@{
+    ViewBag.Title = "Add_User";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+<link href="~/Content/User.css" rel="stylesheet" />
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="user-card">
+                @*@if (ViewBag.msg != null)
+                {
+                    <div class="msgDiv alert alert-success">
+                        @ViewBag.msg
+                    </div>
+                }*@
+                @if (TempData["msg"] != null)
+                {
+                    <div class="msgDiv alert alert-success">
+                        @TempData["msg"]
+                    </div>
+                }
+                <h1 class="text text-success text-center"><span class="fa fa-user header-icon"></span>Add User Panel Here</h1>
+                <hr />
+                @using (Html.BeginForm("Add_User", "Admin", FormMethod.Post, new { onsubmit = "return validateMobile()" }))
+                {
+                    @Html.HiddenFor(model => model.UserId) 
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name)
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { style = "color:red" })
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Mobile)
+                        @Html.TextBoxFor(model => model.Mobile, new { @class = "form-control", oninput = "validateMobile()", id = "mobile", maxlength = "10" })
+                        <span id="mobileError" style="color:red"></span>
+                        @Html.ValidationMessageFor(model => model.Mobile, "", new { style = "color:red" })
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.City)
+                        @Html.TextBoxFor(model => model.City, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.City, "", new { style = "color:red" })
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Password)
+                        @Html.TextBoxFor(model => model.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { style = "color:red" })
+                    </div>
+                    
+                    <div class="form-group">
+                          @Html.LabelFor(model => model.Email)
+                          @Html.TextBoxFor(model => model.Email, new { @class = "form-control", type = "email" })
+                          @Html.ValidationMessageFor(model => model.Email, "", new { style = "color:red" })
+                     </div>
+                    
+                    <div class="form-group">
+                     <label>Role</label>
+                    <select name="Role" class="form-control" disabled>
+                    <option value="User" @(Model.Role == "User" ? "selected" : "")>User</option>
+                    <option value="Admin" @(Model.Role == "Admin" ? "selected" : "")>Admin</option>
+                    </select>
+                    </div>
+
+                    <br />
+                    <button type="submit" class="btn btn-@(Model.UserId == 0 ? "success" : "primary")">
+                         @(Model.UserId == 0 ? "Add User" : "Update User")
+                    </button>
+
+                }
+               
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    function validateMobile() {
+
+        var mobile = document.getElementById("mobile").value;
+        var error = document.getElementById("mobileError");
+
+        if (mobile.length != 10) {
+            error.innerHTML = "Please enter 10 digit mobile number";
+            return false;
+        }
+
+        if (!/^[6-9]\d{9}$/.test(mobile)) {
+            error.innerHTML = "Mobile number must start with 6-9";
+            return false;
+        }
+
+        error.innerHTML = "";
+        return true;
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    window.onload = function () {
+
+        setTimeout(function () {
+
+            $(".msgDiv").fadeOut("slow");
+
+        }, 1000);
+
+    };
+</script>

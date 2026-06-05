@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "UserBookingList";
+    Layout = "~/Views/Shared/HomeLayout.cshtml";
+}
+@using System.Data
+<div class="container mt-4">
+    <h2 class="text-center text-success mb-4">
+        My Bookings
+    </h2>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>BookingId</th>
+                <th>Book Name</th>
+                <th>Total Copies</th>
+                <th>Issued Copies</th>
+                <th>Available Copies</th>
+                <th>Date Of Booking</th>
+                <th>Date Of Returning</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                DataTable dt = ViewBag.BookingList as DataTable;
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    int total = Convert.ToInt32(row["TotalQuantity"]);
+                    int issued = Convert.ToInt32(row["IssuedBooks"]);
+                    int available = total - issued;
+
+                    DateTime dateBooking = Convert.ToDateTime(row["DateOfBooking"]);
+                    object dateReturnObj = row["DateOfReturning"];
+                    string dateReturning = dateReturnObj != DBNull.Value ? Convert.ToDateTime(dateReturnObj).ToString("dd-MM-yyyy HH:mm") : "-";
+                    <tr>
+                        <td>@row["BookingId"]</td>
+                        <td>@row["BookName"]</td>
+                        <td>@total</td>
+                        <td>@issued</td>
+                        <td>@available</td>
+                        <td>@dateBooking.ToString("dd-MM-yyyy HH:mm")</td>
+                        <td>@dateReturning</td>
+                        <td>
+                            @if (row["DateOfReturning"] == DBNull.Value)
+                            {
+                                <span class="badge bg-success">Issued</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Returned</span>
+                            }
+                        </td>
+                        <td>
+                            <a href="@Url.Action("ReturnBook","User", new { bookingId = row["BookingId"] })" class="btn btn-warning btn-sm
+                               @(row["DateOfReturning"] != DBNull.Value ? "disabled" : "") ">
+                                Return
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+

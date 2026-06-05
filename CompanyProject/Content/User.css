@@ -1,0 +1,39 @@
+﻿body {
+    background-color: #f4f6f9;
+}
+
+.user-card{
+    border:2px solid #28a745;
+    border-radius:10px;
+    padding:25px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-top:40px;
+}
+.user-card h2{
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+.form-control{
+    border-radius:6px;
+    border:1px solid #ced4da;
+}
+.form-control:focus{
+    border-color: #28a745;
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+}
+.btn-success{
+    width: 100%;
+    border-radius: 6px;
+    font-weight: 600;
+}
+.header-icon{
+    font-size: 28px;
+    color:#28a745;
+    margin-right:10px;
+}
+.success-msg{
+    font-weight:600;
+    margin-top: 10px;
+    display: block;
+}

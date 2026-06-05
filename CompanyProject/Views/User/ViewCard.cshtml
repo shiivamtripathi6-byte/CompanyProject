@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "ViewCard";
+    Layout = "~/Views/Shared/HomeLayout.cshtml";
+}
+
+@using System.Data
+
+@{
+    DataTable profile = ViewBag.Profile as DataTable;
+    DataRow userRow = null;
+
+    if (profile != null && profile.Rows.Count > 0)
+    {
+        userRow = profile.Rows[0];
+    }
+}
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container mt-5 d-flex justify-content-center">
+    <div>
+    <div class="card shadow" id="cardArea" style="width:350px;border-radius:15px;">
+
+        <div class="card-header bg-primary text-white text-center">
+            <h4>Library ID Card</h4>
+        </div>
+
+        <div class="card-body text-center">
+
+            <img src="~/Content/Upload/@(userRow["Photo"])" class="rounded-circle mb-3" width="100" height="100" />
+
+            <h5>@userRow["Name"]</h5>
+
+            <p><b> ID:</b> @userRow["UserId"]</p>
+
+            <p><b>Mobile:</b> @userRow["Mobile"]</p>
+
+            <p><b>City:</b> @userRow["City"]</p>
+
+        </div>
+
+    </div>
+    <div class="text-center mt-3">
+        <button onclick="printCard()" class="btn btn-success">Print</button> 
+    </div> 
+
+</div>
+</div>
+<script>
+    function printCard() {
+        var printContents = document.getElementById("cardArea").innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
+</script>

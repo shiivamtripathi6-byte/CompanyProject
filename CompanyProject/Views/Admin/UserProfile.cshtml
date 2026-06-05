@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "UserProfile";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+@model System.Data.DataTable
+<h2>UserProfile</h2>
+@if(Model.Rows.Count > 0)
+{
+    var row = Model.Rows[0];
+    <table class="table table-bordered">
+        <tr>
+            <th>UserId</th>
+            <td>@row["UserId"]</td>
+        </tr>
+
+        <tr>
+            <th>Name</th>
+            <td>@row["Name"]</td>
+        </tr>
+        <tr>
+            <th>Email </th>
+            <td>@row["Email"]</td>
+        </tr>
+
+        <tr>
+            <th>Mobile</th>
+            <td>@row["Mobile"]</td>
+        </tr>
+        <tr>
+            <th>City</th>
+            <td>@row["City"]</td>
+        </tr>
+        <tr>
+            <th>Role</th>
+            <td>@row["Role"]</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>@row["Status"]</td>
+        </tr>
+        <tr>
+            <th>Registration Date</th>
+            <td>
+                @Convert.ToDateTime(row["DateOfRegistration"]).ToString("dd MMM yyyy hh:mm tt")
+            </td>
+        </tr>
+
+    </table>
+}
